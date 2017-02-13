@@ -2,7 +2,7 @@
 
 DATE=$(date '+%Y%m%d-%Hh%M')
 TAR_NAME="world-${DATE}.tar.gz"
-SCRIPT_DIR=$(pwd)
+SCRIPT_DIR="/home/lacsap/mcscript/"
 MC_DIR="/docker_data/minecraft/"
 
 if [ $1 == ""];
