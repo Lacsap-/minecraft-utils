@@ -5,28 +5,18 @@ TAR_NAME="world-${DATE}.tar.gz"
 SCRIPT_DIR="/home/lacsap/mcscript/"
 MC_DIR="/docker_data/minecraft/"
 
-if [ $1 == ""];
-then
-  echo "Usage: $0 ftp_credential_file"
-  echo "File example:"
-  echo "HOST=127.0.0.1"
-  echo "USER=admin"
-  echo "PASS=adminp"
-  exit 1
-fi
-
 # Reading ftp credential file
-source $1
+source ~/.mcscript/ftp
 
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Starting world backup"
-${SCRIPT_DIR}/rconcmd.py ~/cred/rconlogin.txt "say [$(date '+%Y%m%d-%Hh%M')] - World backup in progress..."
+${SCRIPT_DIR}/rconcmd.py "say [$(date '+%Y%m%d-%Hh%M')] - World backup in progress..."
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Forcing world save"
-${SCRIPT_DIR}/rconcmd.py ~/cred/rconlogin.txt save-all
+${SCRIPT_DIR}/rconcmd.py save-all
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Stopping automatic world saving"
-${SCRIPT_DIR}/rconcmd.py ~/cred/rconlogin.txt save-off
+${SCRIPT_DIR}/rconcmd.py save-off
 sleep 5
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Creating ${TAR_NAME} file"
@@ -36,7 +26,7 @@ tar -zcf ${TAR_NAME} world
 if [ $? -ne 0 ]; then echo "Error zipping the world dir"; exit 1; fi
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Starting automatic world saving"
-${SCRIPT_DIR}/rconcmd.py ~/cred/rconlogin.txt save-on
+${SCRIPT_DIR}/rconcmd.py save-on
 
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Sending ${TAR_NAME} via FTP"
@@ -56,5 +46,5 @@ cd ${MC_DIR}
 rm ${TAR_NAME}
 
 echo "[$(date '+%Y%m%d-%Hh%M')] - Backup done!"
-${SCRIPT_DIR}/rconcmd.py ~/cred/rconlogin.txt "say [$(date '+%Y%m%d-%Hh%M')] - World backup Done !"
+${SCRIPT_DIR}/rconcmd.py "say [$(date '+%Y%m%d-%Hh%M')] - World backup Done !"
 
